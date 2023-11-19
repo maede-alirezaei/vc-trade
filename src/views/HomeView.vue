@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import SearchUser from '@/components/SearchUser.vue';
+import UserPreview from '@/components/UserPreview.vue';
+import UsersList from '@/components/UsersList.vue';
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div>
+    <SearchUser />
+    <UsersList />
+  </div>
+  <UserPreview />
 </template>
