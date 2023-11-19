@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref, onMounted } from 'vue'
+import { store } from '../stores/store'
 
 interface User {
   gender: string
@@ -38,12 +39,18 @@ async function loadUsers(offset: number, size: number) {
     loading.value = false
   }
 }
+
+function userSelected(user: User) {
+  store.user = { ...user }
+}
 </script>
 
 <template>
   <h1>Users</h1>
   <ul>
-    <li v-for="user in users" :key="user.id.value">{{ user.name.first + ' ' + user.name.last }}</li>
+    <li @click="userSelected(user)" v-for="user in users" :key="user.id.value">
+      {{ user.name.first + ' ' + user.name.last }}
+    </li>
     <button @click="loadMoreUsers">More result...</button>
   </ul>
 </template>

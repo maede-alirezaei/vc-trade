@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { store } from '../stores/store'
+</script>
 
 <template>
-  <h1>User</h1>
+  <h1>{{ store.user.name.first }}</h1>
 </template>
