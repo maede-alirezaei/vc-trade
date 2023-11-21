@@ -1,5 +1,6 @@
+import type { User } from '@/services/users'
 import { reactive } from 'vue'
-
-export const store = reactive({
-  user: {}
-})
+interface RootState {
+  user?: User
+}
+export const store = reactive<RootState>({})

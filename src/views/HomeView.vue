@@ -5,17 +5,17 @@ import UserPreview from '@/components/UserPreview.vue'
 import { getUsers, type User } from '@/services/users'
 import { store } from '@/stores/store'
 import { onMounted, ref, type Ref } from 'vue'
-
 const offset = ref(0)
 const loading = ref(false)
 const errorMessage = ref('')
+const searchParams = ref({})
 const users: Ref<User[]> = ref([])
 onMounted(() => {
   readUsers(0)
 })
-function readUsers(offset: number, params?: object) {
+function readUsers(offset: number) {
   loading.value = true
-  getUsers({ page: offset, ...params })
+  getUsers({ page: offset, ...searchParams.value })
     .then(({ data }) => {
       users.value = [...users.value, ...data.results]
       loading.value = false
@@ -33,16 +33,16 @@ function readMoreUsers() {
 function userSelected(user: User) {
   store.user = { ...user }
 }
-const searchText = ref('')
-function clicked(e) {
-  searchText.value = e
-  readUsers(0, { name: searchText.value })
+function selected(e: any) {
+  users.value = []
+  searchParams.value = { gender: e }
+  readUsers(0)
 }
 </script>
 
 <template>
   <div>
-    <SearchUser @click="clicked" />
+    <SearchUser @selected="selected" />
     <ul>
       <UserListItem
         @click="userSelected(user)"
