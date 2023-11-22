@@ -3,13 +3,14 @@ import SearchUser from '@/components/SearchUser.vue'
 import UserListItem from '@/components/UserListItem.vue'
 import UserPreview from '@/components/UserPreview.vue'
 import { getUsers, type User } from '@/services/users'
-import { store } from '@/stores/store'
 import { onMounted, ref, type Ref } from 'vue'
 const offset = ref(0)
 const loading = ref(false)
 const errorMessage = ref('')
 const searchParams = ref({})
+const selectedUser = ref({})
 const users: Ref<User[]> = ref([])
+
 onMounted(() => {
   readUsers(0)
 })
@@ -31,7 +32,8 @@ function readMoreUsers() {
 }
 
 function userSelected(user: User) {
-  store.user = { ...user }
+  localStorage.setItem('user', JSON.stringify(user))
+  selectedUser.value = user
 }
 function selected(e: any) {
   users.value = []
@@ -53,5 +55,5 @@ function selected(e: any) {
       <button @click="readMoreUsers">More result...</button>
     </ul>
   </div>
-  <UserPreview />
+  <UserPreview :selected-user="selectedUser" />
 </template>
