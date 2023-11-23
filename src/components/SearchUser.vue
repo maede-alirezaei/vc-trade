@@ -22,5 +22,5 @@ function emitSelectedGender(e: any) {
     <option value="female">Female</option>
     <option value="male">Male</option>
   </select>
-  <input @keyup.enter="enterClicked" />
+  <input @input="enterClicked" />
 </template>

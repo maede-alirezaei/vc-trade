@@ -12,7 +12,7 @@ const router = useRouter()
 const searchParams = ref({ gender: router.currentRoute.value.query.gender })
 const selectedUser = ref({})
 const users: Ref<User[]> = ref([])
-
+const currentUsers: Ref<User[]> = ref([])
 onMounted(() => {
   readUsers(0)
 })
@@ -21,6 +21,7 @@ function readUsers(offset: number) {
   getUsers({ page: offset, ...searchParams.value })
     .then(({ data }) => {
       users.value = [...users.value, ...data.results]
+      currentUsers.value = [...users.value]
       loading.value = false
     })
     .catch((error) => {
@@ -37,7 +38,7 @@ function userSelected(user: User) {
   localStorage.setItem('user', JSON.stringify(user))
   selectedUser.value = user
 }
-function selected(e: any) {
+function genderSelected(e: string) {
   users.value = []
   searchParams.value = { gender: e }
   readUsers(0)
@@ -48,11 +49,21 @@ function selected(e: any) {
     }
   })
 }
+
+function enterClicked(e: string) {
+  users.value = [
+    ...currentUsers.value.filter(
+      (user) =>
+        user.name.first.toLowerCase().includes(e.toLowerCase()) ||
+        user.name.last.toLowerCase().includes(e.toLowerCase())
+    )
+  ]
+}
 </script>
 
 <template>
   <div>
-    <SearchUser @selected="selected" />
+    <SearchUser @selected="genderSelected" @clicked="enterClicked" />
     <ul>
       <UserListItem
         @click="userSelected(user)"
