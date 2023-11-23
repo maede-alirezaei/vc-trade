@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SearchUser from '@/components/SearchUser.vue'
+import UserDisplay from '@/components/UserDisplay.vue'
 import UserListItem from '@/components/UserListItem.vue'
-import UserPreview from '@/components/UserPreview.vue'
 import { getUsers, type User } from '@/services/users'
 import { onMounted, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -80,7 +80,7 @@ function onChange(searchText: string) {
       <button @click="readMoreUsers">More result...</button>
     </ul>
   </div>
-  <UserPreview :selected-user="selectedUser" />
+  <UserDisplay :selected-user="selectedUser" />
 </template>
 <style scoped>
 .aside-container {

@@ -31,7 +31,7 @@ defineProps(['user'])
   align-items: center;
   gap: 16px;
   list-style: none;
-  margin: 8px;
+  margin: 8px 0;
 }
 
 .user-image {
