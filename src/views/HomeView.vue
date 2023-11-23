@@ -32,10 +32,6 @@ function readUsers(offset: number) {
       loading.value = false
     })
 }
-function readMoreUsers() {
-  offset.value += 25
-  readUsers(offset.value)
-}
 
 function userSelected(user: User) {
   localStorage.setItem('user', JSON.stringify(user))
@@ -62,35 +58,49 @@ function onChange(searchText: string) {
     )
   ]
 }
+
+function handleScroll(event: Event) {
+  const target = event.target as HTMLDivElement
+  const isAtBottom = target.scrollTop + target.clientHeight <= target.scrollHeight
+  if (isAtBottom && !loading.value) {
+    offset.value += 5
+    readUsers(offset.value)
+  }
+}
 </script>
 
 <template>
-  <div class="aside-container">
+  <div class="side-container">
     <div v-if="errorMessage">{{ errorMessage }}</div>
     <SearchUser @selected="genderSelected" @change="onChange" />
     <h1>Users</h1>
     <div v-if="loading">Loading...</div>
-    <ul>
+    <ul @scroll="handleScroll" class="users-list">
       <UserListItem
         @click="userSelected(user)"
         v-for="user in users"
         :key="user.id.value"
         :user="user"
       />
-      <button @click="readMoreUsers">More result...</button>
+      <li v-if="users.length > 0">More...</li>
     </ul>
   </div>
   <UserDisplay :selected-user="selectedUser" />
 </template>
 <style scoped>
-.aside-container {
+.side-container {
   border: 1px solid #ddd;
   margin: 16px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 16px;
 }
-ul {
+.users-list {
+  overflow-y: auto;
+  max-height: 80vh;
   padding: 0;
+}
+.users-list::-webkit-scrollbar {
+  width: 0px;
 }
 </style>

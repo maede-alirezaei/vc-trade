@@ -14,13 +14,13 @@ watch(
 <template>
   <div class="user-display-container">
     <h1>
-      {{
+      {{ user &&
         `${user.name.first.charAt(0).toUpperCase()}${user.name.first.slice(1)} ${user.name.last
           .charAt(0)
           .toUpperCase()}${user.name.last.slice(1)}`
       }}
     </h1>
-    <div class="user-info">
+    <div v-if="user" class="user-info">
       <img
         :src="user && user.picture.large"
         :alt="`${user && user.name.first} ${user && user.name.last}`"
@@ -35,6 +35,7 @@ watch(
         <div><strong>Contact:</strong> {{ user && user.email }}</div>
       </div>
     </div>
+    <div v-else>No user has been selected.</div>
   </div>
 </template>
 
