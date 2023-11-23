@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 const props = defineProps(['selectedUser'])
-const user = ref()
-const userData = JSON.parse(localStorage.getItem('user'))
-if (userData) {
-  user.value = userData
-}
+const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 
 watch(
   () => props.selectedUser,
@@ -16,5 +12,5 @@ watch(
 </script>
 
 <template>
-  <h1>{{ user?.name.first }}</h1>
+  <h1>{{ user && user.name.first }}</h1>
 </template>

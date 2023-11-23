@@ -4,10 +4,12 @@ import UserListItem from '@/components/UserListItem.vue'
 import UserPreview from '@/components/UserPreview.vue'
 import { getUsers, type User } from '@/services/users'
 import { onMounted, ref, type Ref } from 'vue'
+import { useRouter } from 'vue-router'
 const offset = ref(0)
 const loading = ref(false)
 const errorMessage = ref('')
-const searchParams = ref({})
+const router = useRouter()
+const searchParams = ref({ gender: router.currentRoute.value.query.gender })
 const selectedUser = ref({})
 const users: Ref<User[]> = ref([])
 
@@ -39,6 +41,12 @@ function selected(e: any) {
   users.value = []
   searchParams.value = { gender: e }
   readUsers(0)
+  router.push({
+    name: 'home',
+    query: {
+      gender: e
+    }
+  })
 }
 </script>
 
