@@ -32,6 +32,7 @@ defineProps(['user'])
   gap: 16px;
   list-style: none;
   margin: 8px 0;
+  cursor: pointer;
 }
 
 .user-image {
@@ -52,4 +53,7 @@ defineProps(['user'])
 .user-email {
   color: #555;
 }
+
+
+
 </style>

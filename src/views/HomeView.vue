@@ -10,10 +10,16 @@ const offset = ref(0)
 const loading = ref(false)
 const errorMessage = ref('')
 const searchParams = ref({ gender: router.currentRoute.value.query.gender })
-const selectedUser: Ref<User | undefined> = ref()
+const selectedUser: Ref<User | undefined> = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 const users: Ref<User[]> = ref([])
 const currentUsers: Ref<User[]> = ref([])
+const isSmallScreen = ref(false)
+
 onMounted(() => {
+  isSmallScreen.value = window.innerWidth < 600
+  window.addEventListener('resize', () => {
+    isSmallScreen.value = window.innerWidth < 600
+  })
   readUsers(0)
 })
 function readUsers(offset: number) {
@@ -53,7 +59,7 @@ function onChange(searchText: string) {
   users.value = [
     ...currentUsers.value.filter((user) => {
       const name = user.name.first + user.name.last
-      return name.toLowerCase().includes(searchText.toLowerCase().replace(/\s/g, '') )
+      return name.toLowerCase().includes(searchText.toLowerCase().replace(/\s/g, ''))
     })
   ]
 }
@@ -66,14 +72,21 @@ function handleScroll(event: Event) {
     readUsers(offset.value)
   }
 }
+function showUsersList() {
+  selectedUser.value = undefined
+}
 </script>
 
 <template>
-  <div class="side-container">
+  <button class="go-back-button" v-if="selectedUser && isSmallScreen" @click="showUsersList">
+    Go Back to the User List
+  </button>
+  <div class="side-container" v-if="(isSmallScreen && !selectedUser) || !isSmallScreen">
     <div v-if="errorMessage">{{ errorMessage }}</div>
     <SearchUser @selected="genderSelected" @change="onChange" />
     <h1>Users</h1>
     <div v-if="loading">Loading...</div>
+
     <ul @scroll="handleScroll" class="users-list">
       <UserListItem
         @click="userSelected(user)"
@@ -84,9 +97,23 @@ function handleScroll(event: Event) {
       <li v-if="users.length > 24">More...</li>
     </ul>
   </div>
-  <UserDisplay :selected-user="selectedUser" />
+  <UserDisplay v-if="!(isSmallScreen && !selectedUser)" :selected-user="selectedUser" />
 </template>
 <style scoped>
+.go-back-button {
+  background-color: #a3afbc;
+  color: #ffffff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 32px 16px 0px;
+}
+
+.go-back-button:hover {
+  background-color: #648db8;
+}
+
 .side-container {
   border: 1px solid #ddd;
   margin: 16px;
@@ -101,5 +128,11 @@ function handleScroll(event: Event) {
 }
 .users-list::-webkit-scrollbar {
   width: 0px;
+}
+@media (max-width: 600px) {
+  .side-container {
+    position: fixed;
+    width: 100%;
+  }
 }
 </style>

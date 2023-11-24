@@ -6,10 +6,8 @@
   grid-template-columns: 1fr 2fr;
 }
 
-
 @media (max-width: 600px) {
-
   #app {
-    grid-template-columns: none;
+    display: block;
   }
 }
