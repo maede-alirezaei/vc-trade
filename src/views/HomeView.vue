@@ -82,7 +82,7 @@ function handleScroll(event: Event) {
         :key="user.id.value"
         :user="user"
       />
-      <li v-if="users.length > 0">More...</li>
+      <li v-if="users.length > 24">More...</li>
     </ul>
   </div>
   <UserDisplay :selected-user="selectedUser" />
