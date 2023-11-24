@@ -51,11 +51,10 @@ function genderSelected(gender: string) {
 
 function onChange(searchText: string) {
   users.value = [
-    ...currentUsers.value.filter(
-      (user) =>
-        user.name.first.toLowerCase().includes(searchText.toLowerCase()) ||
-        user.name.last.toLowerCase().includes(searchText.toLowerCase())
-    )
+    ...currentUsers.value.filter((user) => {
+      const name = user.name.first + user.name.last
+      return name.toLowerCase().includes(searchText.toLowerCase().replace(/\s/g, '') )
+    })
   ]
 }
 
