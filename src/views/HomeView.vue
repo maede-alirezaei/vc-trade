@@ -44,20 +44,32 @@ function userSelected(user: User) {
   selectedUser.value = user
 }
 function genderSelected(gender: string) {
-  users.value = []
-  searchParams.value = { gender }
-  readUsers(0)
+  // Since the api returns random users with each api call so here I filtered the curent users as well
+  // but if you need more users it will fetch the new users according to the gender
+
   router.push({
     name: 'home',
     query: {
       gender
     }
   })
+  currentUsers.value = [
+    ...users.value.filter((user: User) => {
+      return user.gender === gender
+    })
+  ]
+
+  // If the page reloads and the gender is set there will be no data for the opposite gender
+  if (currentUsers.value.length === 0) {
+    users.value = []
+    searchParams.value = { gender }
+    readUsers(0)
+  }
 }
 
 function onChange(searchText: string) {
-  users.value = [
-    ...currentUsers.value.filter((user) => {
+  currentUsers.value = [
+    ...users.value.filter((user: User) => {
       const name = user.name.first + user.name.last
       return name.toLowerCase().includes(searchText.toLowerCase().replace(/\s/g, ''))
     })
@@ -66,7 +78,7 @@ function onChange(searchText: string) {
 
 function handleScroll(event: Event) {
   const target = event.target as HTMLDivElement
-  const isAtBottom = target.scrollTop + target.clientHeight <= target.scrollHeight
+  const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight
   if (isAtBottom && !loading.value) {
     offset.value += 5
     readUsers(offset.value)
@@ -90,44 +102,37 @@ function showUsersList() {
     <ul @scroll="handleScroll" class="users-list">
       <UserListItem
         @click="userSelected(user)"
-        v-for="user in users"
+        v-for="user in currentUsers"
         :key="user.id.value"
         :user="user"
       />
-      <li v-if="users.length > 24">More...</li>
+      <li v-if="currentUsers.length > 24">More...</li>
     </ul>
   </div>
   <UserDisplay v-if="!(isSmallScreen && !selectedUser)" :selected-user="selectedUser" />
 </template>
 <style scoped>
-.go-back-button {
-  background-color: #a3afbc;
-  color: #ffffff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin: 32px 16px 0px;
-}
-
-.go-back-button:hover {
-  background-color: #648db8;
-}
-
 .side-container {
-  border: 1px solid #ddd;
+  border: 1px solid var(--vt-c-light-grey);
   margin: 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--vt-c-dark-grey);
   padding: 16px;
+  display: flex;
+  flex-direction: column;
 }
 .users-list {
   overflow-y: auto;
-  max-height: 80vh;
-  padding: 0;
+  max-height: 100%;
+  padding: 0; /* to enable list defult padding */
 }
 .users-list::-webkit-scrollbar {
-  width: 0px;
+  background-color: var(--vt-c-white-soft);
+  width: 5px;
+}
+.users-list::-webkit-scrollbar-thumb {
+  background-color: var(--vt-c-divider-dark-1);
+  border-radius: 4px;
 }
 @media (max-width: 600px) {
   .side-container {

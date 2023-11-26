@@ -25,7 +25,7 @@ defineProps(['user'])
 <style scoped>
 .user-item {
   padding: 16px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--vt-c-light-grey);
   border-radius: 8px;
   display: flex;
   align-items: center;

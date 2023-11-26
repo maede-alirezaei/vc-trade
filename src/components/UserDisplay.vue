@@ -44,11 +44,17 @@ strong {
   font-weight: bold;
 }
 .user-display-container {
-  border: 1px solid #ddd;
+  border: 1px solid var(--vt-c-light-grey);
   margin: 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--vt-c-dark-grey);
   padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 h1 {
@@ -65,14 +71,11 @@ h1 {
 }
 
 .user-image {
+  flex: 1;
   width: 50%;
   height: 50%;
   border-radius: 20%;
   margin: 16px;
-  image-rendering: auto;
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: -webkit-optimize-contrast;
 }
 
 .user-details {

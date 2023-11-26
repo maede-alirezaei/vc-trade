@@ -3,6 +3,10 @@
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
+  --vt-c-light-grey: #ddd;
+  --vt-c-dark-grey: rgba(68, 60, 60, 0.262);
+  --vt-c-blue-1: #648db8;
+  --vt-c-blue-2: #a3afbc;
 
   --vt-c-black: #181818;
   --vt-c-black-soft: #222222;

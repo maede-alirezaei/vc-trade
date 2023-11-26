@@ -2,12 +2,25 @@
 
 #app {
   font-weight: normal;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+  display: flex;
+  max-height: 100vh;
 }
 
 @media (max-width: 600px) {
   #app {
     display: block;
   }
+}
+.go-back-button {
+  background-color: var(--vt-c-blue-2);
+  color: var(--vt-c-white-soft);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 32px 16px 0px;
+}
+
+.go-back-button:hover {
+  background-color: var(--vt-c-blue-1);
 }
