@@ -36,6 +36,7 @@ function readUsers(offset: number) {
     })
     .finally(() => {
       loading.value = false
+      filterGender()
     })
 }
 
@@ -43,9 +44,25 @@ function userSelected(user: User) {
   localStorage.setItem('user', JSON.stringify(user))
   selectedUser.value = user
 }
+
+function filterGender() {
+  const { gender } = searchParams.value
+
+  if (gender !== '') {
+    currentUsers.value = [
+      ...users.value.filter((user: User) => {
+        return user.gender === gender
+      })
+    ]
+  } else {
+    currentUsers.value = users.value
+  }
+}
+
 function genderSelected(gender: string) {
   // Since the api returns random users with each api call so here I filtered the curent users as well
   // but if you need more users it will fetch the new users accordingly to the gender
+  searchParams.value = { gender }
 
   router.push({
     name: 'home',
@@ -53,16 +70,11 @@ function genderSelected(gender: string) {
       gender
     }
   })
-  currentUsers.value = [
-    ...users.value.filter((user: User) => {
-      return user.gender === gender
-    })
-  ]
 
-  // If the page reloads and the gender is set there will be no data for the opposite gender
+  filterGender()
+
+  // // If the page reloads and the gender is set there will be no data for the opposite gender
   if (currentUsers.value.length === 0) {
-    users.value = []
-    searchParams.value = { gender }
     readUsers(0)
   }
 }
@@ -79,7 +91,7 @@ function onChange(searchText: string) {
 function handleScroll(event: Event) {
   const target = event.target as HTMLDivElement
   const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight
-  if (isAtBottom && !loading.value) {
+  if (isAtBottom && !loading.value && target.scrollTop > 0) {
     offset.value += 5
     readUsers(offset.value)
   }
@@ -140,6 +152,9 @@ function showUsersList() {
   .side-container {
     position: fixed;
     width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 0;
   }
 }
 </style>
