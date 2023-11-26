@@ -45,7 +45,7 @@ function userSelected(user: User) {
 }
 function genderSelected(gender: string) {
   // Since the api returns random users with each api call so here I filtered the curent users as well
-  // but if you need more users it will fetch the new users according to the gender
+  // but if you need more users it will fetch the new users accordingly to the gender
 
   router.push({
     name: 'home',
@@ -115,6 +115,7 @@ function showUsersList() {
 .side-container {
   border: 1px solid var(--vt-c-light-grey);
   margin: 16px;
+  flex: 0.5 0;
   border-radius: 8px;
   box-shadow: 0 2px 4px var(--vt-c-dark-grey);
   padding: 16px;
@@ -125,6 +126,7 @@ function showUsersList() {
   overflow-y: auto;
   max-height: 100%;
   padding: 0; /* to enable list defult padding */
+  padding-right: 5px;
 }
 .users-list::-webkit-scrollbar {
   background-color: var(--vt-c-white-soft);

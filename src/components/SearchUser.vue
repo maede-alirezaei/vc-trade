@@ -38,7 +38,7 @@ function emitSelectedGender(e: any) {
   padding: 8px;
   border: 1px solid var(--vt-c-light-grey);
   border-radius: 8px;
-  width: 25%;
+  width: fit-content;
 }
 
 .input-field {

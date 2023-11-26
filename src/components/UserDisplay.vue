@@ -49,7 +49,7 @@ strong {
   border-radius: 8px;
   box-shadow: 0 2px 4px var(--vt-c-dark-grey);
   padding: 16px;
-  flex: 1;
+  flex: 1 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
