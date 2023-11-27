@@ -94,7 +94,7 @@ function handleScroll(event: Event) {
   const target = event.target as HTMLDivElement
   const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight
   if (isAtBottom && !loading.value && target.scrollTop > 0) {
-    offset.value += 5
+    offset.value += 1
     readUsers(offset.value)
   }
 }
