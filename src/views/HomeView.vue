@@ -9,11 +9,12 @@ const router = useRouter()
 const offset = ref(0)
 const loading = ref(false)
 const errorMessage = ref('')
-const searchParams = ref({ gender: router.currentRoute.value.query.gender })
+const searchParams = ref({ gender: router.currentRoute.value.query.gender || '' })
 const selectedUser: Ref<User | undefined> = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 const users: Ref<User[]> = ref([])
-const filteredUsers: Ref<User[]> = ref([])
+const currentUsers: Ref<User[]> = ref([])
 const isSmallScreen = ref(false)
+const searchText: Ref<string> = ref('')
 
 onMounted(() => {
   isSmallScreen.value = window.innerWidth < 600
@@ -27,7 +28,7 @@ function readUsers(offset: number) {
   getUsers({ page: offset, ...searchParams.value })
     .then(({ data }) => {
       users.value = [...users.value, ...data.results]
-      filteredUsers.value = [...users.value]
+      currentUsers.value = [...users.value]
       loading.value = false
     })
     .catch((error) => {
@@ -37,7 +38,7 @@ function readUsers(offset: number) {
     .finally(() => {
       loading.value = false
       if (searchParams.value.gender) {
-        filteredUsers.value = [...filterGender()]
+        filter()
       }
     })
 }
@@ -47,50 +48,38 @@ function userSelected(user: User) {
   selectedUser.value = user
 }
 
-function filterGender() {
+function filter() {
+  const filterSearch = (target: string) =>
+    target.toLowerCase().includes(searchText.value.toLowerCase().replace(/\s/g, ''))
   const { gender } = searchParams.value
-  if (gender !== '') {
-    return [
-      ...users.value.filter((user: User) => {
-        return user.gender === gender
-      })
-    ]
-  } else {
-    return [...users.value]
-  }
+  currentUsers.value = [
+    ...users.value.filter((user: User) => {
+      const name = user.name.first + user.name.last
+      filterSearch(name)
+      return gender === '' ? filterSearch(name) : filterSearch(name) && user.gender === gender
+    })
+  ]
 }
 
 function genderSelected(gender: string) {
   /* Since the API returns random users with each call, the current users arre filtered accordingly.
   However, if you need more users, it will fetch new ones based on the selected gender. */
   searchParams.value = { gender }
-
   router.push({
     name: 'home',
     query: {
       gender
     }
   })
-
-  filteredUsers.value = [...filterGender()]
-  if (filteredUsers.value.length === 0) {
+  filter()
+  if (currentUsers.value.length === 0 && searchText.value === '') {
     readUsers(0)
   }
 }
 
-function onChange(searchText: string) {
-  let currentUsers: User[] = []
-  if (searchParams.value.gender) {
-    currentUsers = [...filterGender()]
-  } else {
-    currentUsers = [...users.value]
-  }
-  filteredUsers.value = [
-    ...currentUsers.filter((user: User) => {
-      const name = user.name.first + user.name.last
-      return name.toLowerCase().includes(searchText.toLowerCase().replace(/\s/g, ''))
-    })
-  ]
+function onChange(value: string) {
+  searchText.value = value
+  filter()
 }
 
 function handleScroll(event: Event) {
@@ -119,11 +108,11 @@ function showUsersList() {
     <ul @scroll="handleScroll" class="users-list">
       <UserListItem
         @click="userSelected(user)"
-        v-for="user in filteredUsers"
+        v-for="user in currentUsers"
         :key="user.id.value"
         :user="user"
       />
-      <li v-if="filteredUsers.length > 24">More...</li>
+      <li v-if="currentUsers.length > 24">More...</li>
     </ul>
   </div>
   <UserDisplay v-if="!(isSmallScreen && !selectedUser)" :selected-user="selectedUser" />
