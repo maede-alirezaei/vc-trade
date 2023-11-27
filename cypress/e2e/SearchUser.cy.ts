@@ -3,7 +3,6 @@ import { getUsers } from './utils/getUser'
 beforeEach(() => {
   cy.visit('/')
   getUsers()
-  cy.wait(2000)
 })
 describe('Search User component', () => {
   it('Should filter users by changing the gender ', () => {

@@ -3,7 +3,6 @@ import { getUsers } from './utils/getUser'
 beforeEach(() => {
   cy.visit('/')
   getUsers()
-  cy.wait(2000)
 })
 describe('HomeView component', () => {
   it('Should display users ', () => {
