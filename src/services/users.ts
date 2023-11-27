@@ -6,7 +6,7 @@ export interface User {
   id: Id
 }
 
-interface UserApiResponse {
+export interface UserApiResponse {
   results: User[]
 }
 interface Name {

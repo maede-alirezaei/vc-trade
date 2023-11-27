@@ -92,7 +92,7 @@ function onChange(searchText: string) {
 
 function handleScroll(event: Event) {
   const target = event.target as HTMLDivElement
-  const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight
+  const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight-1
   if (isAtBottom && !loading.value && target.scrollTop > 0) {
     offset.value += 1
     readUsers(offset.value)
