@@ -36,7 +36,9 @@ function readUsers(offset: number) {
     })
     .finally(() => {
       loading.value = false
-      filterGender()
+      if (searchParams.value.gender) {
+        filterGender()
+      }
     })
 }
 

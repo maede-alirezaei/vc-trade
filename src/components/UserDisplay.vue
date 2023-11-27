@@ -14,7 +14,8 @@ watch(
 <template>
   <div class="user-display-container">
     <h1>
-      {{ user &&
+      {{
+        user &&
         `${user.name.first.charAt(0).toUpperCase()}${user.name.first.slice(1)} ${user.name.last
           .charAt(0)
           .toUpperCase()}${user.name.last.slice(1)}`
@@ -55,6 +56,7 @@ strong {
   justify-content: center;
   max-height: 100%;
   overflow: hidden;
+  text-align: center;
 }
 
 h1 {
