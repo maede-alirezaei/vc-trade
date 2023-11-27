@@ -79,7 +79,12 @@ function genderSelected(gender: string) {
 }
 
 function onChange(searchText: string) {
-  const currentUsers = [...filterGender()]
+  let currentUsers: User[] = []
+  if (searchParams.value.gender) {
+    currentUsers = [...filterGender()]
+  } else {
+    currentUsers = [...users.value]
+  }
   filteredUsers.value = [
     ...currentUsers.filter((user: User) => {
       const name = user.name.first + user.name.last
