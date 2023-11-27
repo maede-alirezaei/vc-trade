@@ -12,7 +12,7 @@ const errorMessage = ref('')
 const searchParams = ref({ gender: router.currentRoute.value.query.gender })
 const selectedUser: Ref<User | undefined> = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 const users: Ref<User[]> = ref([])
-const currentUsers: Ref<User[]> = ref([])
+const filteredUsers: Ref<User[]> = ref([])
 const isSmallScreen = ref(false)
 
 onMounted(() => {
@@ -27,7 +27,7 @@ function readUsers(offset: number) {
   getUsers({ page: offset, ...searchParams.value })
     .then(({ data }) => {
       users.value = [...users.value, ...data.results]
-      currentUsers.value = [...users.value]
+      filteredUsers.value = [...users.value]
       loading.value = false
     })
     .catch((error) => {
@@ -37,7 +37,7 @@ function readUsers(offset: number) {
     .finally(() => {
       loading.value = false
       if (searchParams.value.gender) {
-        filterGender()
+        filteredUsers.value = [...filterGender()]
       }
     })
 }
@@ -49,21 +49,20 @@ function userSelected(user: User) {
 
 function filterGender() {
   const { gender } = searchParams.value
-
   if (gender !== '') {
-    currentUsers.value = [
+    return [
       ...users.value.filter((user: User) => {
         return user.gender === gender
       })
     ]
   } else {
-    currentUsers.value = users.value
+    return [...users.value]
   }
 }
 
 function genderSelected(gender: string) {
-  // Since the api returns random users with each api call so here I filtered the curent users as well
-  // but if you need more users it will fetch the new users accordingly to the gender
+  /* Since the API returns random users with each call, the current users arre filtered accordingly.
+  However, if you need more users, it will fetch new ones based on the selected gender. */
   searchParams.value = { gender }
 
   router.push({
@@ -73,17 +72,16 @@ function genderSelected(gender: string) {
     }
   })
 
-  filterGender()
-
-  // // If the page reloads and the gender is set there will be no data for the opposite gender
-  if (currentUsers.value.length === 0) {
+  filteredUsers.value = [...filterGender()]
+  if (filteredUsers.value.length === 0) {
     readUsers(0)
   }
 }
 
 function onChange(searchText: string) {
-  currentUsers.value = [
-    ...users.value.filter((user: User) => {
+  const currentUsers = [...filterGender()]
+  filteredUsers.value = [
+    ...currentUsers.filter((user: User) => {
       const name = user.name.first + user.name.last
       return name.toLowerCase().includes(searchText.toLowerCase().replace(/\s/g, ''))
     })
@@ -92,7 +90,7 @@ function onChange(searchText: string) {
 
 function handleScroll(event: Event) {
   const target = event.target as HTMLDivElement
-  const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight-1
+  const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 1
   if (isAtBottom && !loading.value && target.scrollTop > 0) {
     offset.value += 1
     readUsers(offset.value)
@@ -116,11 +114,11 @@ function showUsersList() {
     <ul @scroll="handleScroll" class="users-list">
       <UserListItem
         @click="userSelected(user)"
-        v-for="user in currentUsers"
+        v-for="user in filteredUsers"
         :key="user.id.value"
         :user="user"
       />
-      <li v-if="currentUsers.length > 24">More...</li>
+      <li v-if="filteredUsers.length > 24">More...</li>
     </ul>
   </div>
   <UserDisplay v-if="!(isSmallScreen && !selectedUser)" :selected-user="selectedUser" />
