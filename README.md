@@ -1,25 +1,35 @@
 # vc-trade
 
-This template should help get you started developing with Vue 3 in Vite.
+## Project Overview
 
-## Recommended IDE Setup
+This project is a User Search Page implementation based on user requests. The goal is to create a page that allows users to search for other users within the company, display matching results, and show detailed information when a user is selected. The application retrieves user information from the [randomuser.me API](https://randomuser.me/documentation).
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Business Requirements
 
-## Type Support for `.vue` Imports in TS
+1. **Initial Loading:**
+   - Upon page load, populate the results list with 25 user entries.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+2. **Search and Filtering:**
+   - Include a free text input at the top of the search list for filtering by the user's First name or Last name field.
+   - Allow filtering by gender (only "male" and "female" are valid options).
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+5. **Infinite Scrolling:**
+   - Infinite scrolling on the search list is implemented.
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-## Customize configuration
+## Technical Requirements
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- **Framework:**
+  - The application must be developed using Vue 3, TypeScript.
+
+- **Testing:**
+  - Use Cypress for end-to-end testing.
+
+## Getting Started
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/your-repo.git
 
 ## Project Setup
 
