@@ -23,14 +23,10 @@ This project is a User Search Page implementation based on user requests. The go
   - The application must be developed using Vue 3, TypeScript.
 
 - **Testing:**
-  - Use Cypress for end-to-end testing.
-
-## Getting Started
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/your-repo.git
-
+  - Run Cypress tests:
+```
+npx cypress open
+```
 ## Project Setup
 
 ```sh
