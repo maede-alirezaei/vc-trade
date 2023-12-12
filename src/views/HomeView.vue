@@ -13,11 +13,10 @@ const searchParams = ref({ gender: router.currentRoute.value.query.gender || '' 
 const selectedUser: Ref<User | undefined> = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 const users: Ref<User[]> = ref([])
 const currentUsers: Ref<User[]> = ref([])
-const isSmallScreen = ref(false)
+const isSmallScreen = ref()
 const searchText: Ref<string> = ref('')
 
 onMounted(() => {
-  isSmallScreen.value = window.innerWidth < 600
   window.addEventListener('resize', () => {
     isSmallScreen.value = window.innerWidth < 600
   })
@@ -52,13 +51,10 @@ function filter() {
   const filterSearch = (target: string) =>
     target.toLowerCase().includes(searchText.value.toLowerCase().replace(/\s/g, ''))
   const { gender } = searchParams.value
-  currentUsers.value = [
-    ...users.value.filter((user: User) => {
-      const name = user.name.first + user.name.last
-      filterSearch(name)
-      return gender === '' ? filterSearch(name) : filterSearch(name) && user.gender === gender
-    })
-  ]
+  currentUsers.value = users.value.filter((user: User) => {
+    const name = user.name.first + user.name.last
+    return gender === '' ? filterSearch(name) : filterSearch(name) && user.gender === gender
+  })
 }
 
 function genderSelected(gender: string) {

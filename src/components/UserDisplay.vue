@@ -1,39 +1,41 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-const props = defineProps(['selectedUser'])
-const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
-
-watch(
-  () => props.selectedUser,
-  () => {
-    user.value = props.selectedUser
-  }
-)
+import type { User } from '@/services/users'
+import { computed } from 'vue'
+interface UserDisplayProps {
+  selectedUser?: User
+}
+const props = defineProps<UserDisplayProps>()
+const fullName = computed(() => {
+  if (!props.selectedUser) return
+  return (
+    props.selectedUser?.name.first.charAt(0).toUpperCase() +
+    props.selectedUser?.name.first.slice(1) +
+    props.selectedUser?.name.last.charAt(0).toUpperCase() +
+    props.selectedUser?.name.last.slice(1)
+  )
+})
 </script>
 
 <template>
   <div class="user-display-container">
     <h1>
-      {{
-        user &&
-        `${user.name.first.charAt(0).toUpperCase()}${user.name.first.slice(1)} ${user.name.last
-          .charAt(0)
-          .toUpperCase()}${user.name.last.slice(1)}`
-      }}
+      {{ fullName }}
     </h1>
-    <div v-if="user" class="user-info">
+    <div v-if="props.selectedUser" class="user-info">
       <img
-        :src="user && user.picture.large"
-        :alt="`${user && user.name.first} ${user && user.name.last}`"
+        :src="props.selectedUser && props.selectedUser.picture.large"
+        :alt="`${props.selectedUser && props.selectedUser.name.first} ${
+          props.selectedUser && props.selectedUser.name.last
+        }`"
         class="user-image"
       />
       <div class="user-details">
-        <div><strong>ID:</strong> {{ user && user.id.value }}</div>
+        <div><strong>ID:</strong> {{ props.selectedUser && props.selectedUser.id.value }}</div>
         <div>
-          <strong>Location:</strong> {{ user && user.location.city }},
-          {{ user && user.location.country }}
+          <strong>Location:</strong> {{ props.selectedUser && props.selectedUser.location.city }},
+          {{ props.selectedUser && props.selectedUser.location.country }}
         </div>
-        <div><strong>Contact:</strong> {{ user && user.email }}</div>
+        <div><strong>Contact:</strong> {{ props.selectedUser && props.selectedUser.email }}</div>
       </div>
     </div>
     <div v-else>No user has been selected.</div>

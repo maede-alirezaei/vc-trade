@@ -14,6 +14,7 @@ export interface UserApiResponse {
 }
 interface UserLocation {
   city: string
+  country: string
 }
 interface Picture {
   large: string
